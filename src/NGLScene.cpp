@@ -28,7 +28,7 @@ NGLScene::NGLScene(QWindow *_parent) : OpenGLWindow(_parent)
   // mouse rotation values set to 0
   m_spinXFace=0;
   m_spinYFace=0;
-  setTitle("Using ngl::lookAt() and ngl::perspective()");
+  setTitle("Shift Click to place ");
 }
 
 
