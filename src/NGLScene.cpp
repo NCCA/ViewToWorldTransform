@@ -37,13 +37,12 @@ NGLScene::~NGLScene()
   std::cout<<"Shutting down NGL, removing VAO's and Shaders\n";
 }
 
-void NGLScene::resizeGL(int _w, int _h)
+void NGLScene::resizeGL(QResizeEvent *_event)
 {
-  // set the viewport for openGL
-  glViewport(0,0,_w,_h);
-  m_projection=ngl::perspective(45,(float)_w/_h,0.5f,50.0f);
-  // now set the camera size values as the screen size has changed
-  update();
+  m_width=_event->size().width()*devicePixelRatio();
+  m_height=_event->size().height()*devicePixelRatio();
+
+  m_projection=ngl::perspective(45,float(width()/height()),0.5f,50.0f);
 }
 
 
@@ -70,14 +69,9 @@ void NGLScene::initializeGL()
   ngl::Vec3 to(0,0,0);
   ngl::Vec3 up(0,1,0);
   m_view=ngl::lookAt(from,to,up);
- // std::cout<<m_view<<"\n";
-  int w=this->size().width();
-  int h=this->size().height();
 
-  m_projection=ngl::perspective(45,(float)w/h,0.5,50);
-  // as re-size is not explicitly called we need to do this.
-  glViewport(0,0,width()*devicePixelRatio(),height()*devicePixelRatio());
 
+  m_projection=ngl::perspective(45,float(width()/height()),0.5f,50.0f);
 }
 
 
@@ -102,13 +96,12 @@ void NGLScene::paintGL()
 {
   // clear the screen and depth buffer
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
+  glViewport(0,0,m_width,m_height);
   // grab an instance of the shader manager
   ngl::ShaderLib *shader=ngl::ShaderLib::instance();
   (*shader)["nglDiffuseShader"]->use();
 
   // Rotation based on the mouse position for our global transform
-  ngl::Transformation trans;
   ngl::Mat4 rotX;
   ngl::Mat4 rotY;
   // create the rotation matrices
