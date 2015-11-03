@@ -45,6 +45,13 @@ void NGLScene::resizeGL(QResizeEvent *_event)
   m_projection=ngl::perspective(45,float(width()/height()),0.5f,50.0f);
 }
 
+void NGLScene::resizeGL(int _w , int _h)
+{
+  m_width=_w*devicePixelRatio();
+  m_height=_h*devicePixelRatio();
+  m_projection=ngl::perspective(45,float(width()/height()),0.5f,50.0f);
+}
+
 
 void NGLScene::initializeGL()
 {
