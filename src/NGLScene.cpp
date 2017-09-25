@@ -78,10 +78,10 @@ void NGLScene::loadMatricesToShader()
   ngl::Mat3 normalMatrix;
   ngl::Mat4 M;
   M=m_transform.getMatrix();
-  MV=  M*m_view;
-  MVP= MV*m_projection;
+  MV=  m_view*M;
+  MVP= m_projection*MV;
   normalMatrix=MV;
-  normalMatrix.inverse();
+  normalMatrix.inverse().transpose();
   shader->setUniform("MVP",MVP);
   shader->setUniform("normalMatrix",normalMatrix);
  }
@@ -258,8 +258,6 @@ ngl::Vec3 NGLScene::getWorldSpace(int _x, int _y)
 /*  ngl::Mat4 t=m_projection;
   ngl::Mat4 v=m_view;
   // as ngl:: and OpenGL use different formats need to transpose the matrix.
-  t.transpose();
-  v.transpose();
   ngl::Mat4 inverse=( t*v).inverse();
 
   ngl::Vec4 tmp(0,0,1.0f,1.0f);
@@ -272,7 +270,7 @@ ngl::Vec3 NGLScene::getWorldSpace(int _x, int _y)
   obj/=obj.m_w;
   return obj.toVec3();*/
    //ngl now has this built in as well
-  return ngl::unProject(ngl::Vec3(_x,_y,1.0f),
+ return ngl::unProject(ngl::Vec3(_x,_y,1.0f),
                         m_view,
                         m_projection,
                         ngl::Vec4(0,0,width(),height())
