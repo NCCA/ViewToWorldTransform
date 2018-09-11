@@ -2,10 +2,7 @@
 #include <QGuiApplication>
 
 #include "NGLScene.h"
-#include <ngl/Camera.h>
-#include <ngl/Light.h>
 #include <ngl/Transformation.h>
-#include <ngl/Material.h>
 #include <ngl/NGLInit.h>
 #include <ngl/VAOPrimitives.h>
 #include <ngl/ShaderLib.h>
@@ -30,9 +27,9 @@ NGLScene::~NGLScene()
 
 void NGLScene::resizeGL(int _w , int _h)
 {
-  m_win.width=_w*devicePixelRatio();
-  m_win.height=_h*devicePixelRatio();
-  m_projection=ngl::perspective(45,float(width()/height()),0.5f,50.0f);
+  m_win.width  = static_cast<int>( _w * devicePixelRatio() );
+  m_win.height = static_cast<int>( _h * devicePixelRatio() );
+  m_projection=ngl::perspective(45.0f,float(width()/height()),0.5f,50.0f);
   m_text->setScreenSize(m_win.width,m_win.height);
 }
 
